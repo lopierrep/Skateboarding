@@ -19,11 +19,11 @@ class SKATEBOARDING_API ISkateboardingValuesInterface
 
 	
 public:
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void GetPlayerInputs(float &MoveForward, float &MoveRight);
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
-	void GetSpeedUp(bool &SpeedUp);
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	bool GetSpeedUp();
 
 	
 };
