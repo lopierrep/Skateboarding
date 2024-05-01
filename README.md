@@ -21,7 +21,7 @@ Binds to the Jump from the Skate Movement Component and every time the player ju
 
 ### Map
 
-## Personal assessment
+### Personal assessment
 Finally, my personal assessment of my performance is an 8 out of 10, I think that the movement and score systems are pretty good, but I am not I'm not sure if you'll like the map. And perhaps with more and better animations the prototype would have looked better.
 Christian Lopierre
 
