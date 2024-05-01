@@ -15,11 +15,21 @@ class SKATEBOARDING_API UObstacleLogicComponent : public UActorComponent
 public:	
 	UObstacleLogicComponent();
 
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
+							   FActorComponentTickFunction* ThisTickFunction) override;
+
 protected:
 
 	virtual void BeginPlay() override;
 
-public:	
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
-	                           FActorComponentTickFunction* ThisTickFunction) override;
+private:
+	UPROPERTY(EditAnywhere)
+	int32 ScoreValue = 1;
+
+public:
+	UFUNCTION(BlueprintCallable)
+	int32 GetScoreValue() const
+	{
+		return ScoreValue;
+	}
 };
