@@ -60,7 +60,7 @@ private:
 
 	UPROPERTY()	AController* Controller;
 	UPROPERTY()	APawn* Pawn;
-	UPROPERTY() UCharacterMovementComponent* CharacterMovementComponent;	
+	UPROPERTY() UCharacterMovementComponent* CharacterMovementComponent;
 	
 	//Speeds values
 	UPROPERTY(EditAnywhere, Category=Speed)	float ForwardSpeed = 700.f;
