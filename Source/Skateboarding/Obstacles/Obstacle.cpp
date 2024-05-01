@@ -14,7 +14,8 @@ AObstacle::AObstacle()
 
 	BoxCollider = CreateDefaultSubobject<UBoxComponent>("BoxSphere");
 	BoxCollider->SetupAttachment(ObstacleMesh);
-	BoxCollider->SetBoxExtent(FVector(50.0f, 50.0f, 200.f), true);
+	BoxCollider->SetBoxExtent(FVector(50.0f, 50.0f, 225.f), true);
+	BoxCollider->SetRelativeLocation(FVector(0.0f, 0.0f, 225.f));
 	BoxCollider->SetCollisionResponseToAllChannels(ECR_Ignore);
 	BoxCollider->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 	\
