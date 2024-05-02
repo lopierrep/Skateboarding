@@ -38,7 +38,6 @@ void USkateMovementComponent::SetupInputs(UInputComponent* PlayerInputComponent)
 }
 
 
-
 void USkateMovementComponent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -52,10 +51,10 @@ void USkateMovementComponent::BeginPlay()
 
 }
 
+
 void USkateMovementComponent::MoveForward(const FInputActionValue& Value)
 {
-	if (CharacterMovementComponent == nullptr) return;
-	if (Pawn == nullptr) return;
+	if (CharacterMovementComponent == nullptr || Pawn == nullptr) return;
 	
 	ForwardInputValue = Value.Get<float>();
 	float InterpolationSpeed;
@@ -71,7 +70,6 @@ void USkateMovementComponent::MoveForward(const FInputActionValue& Value)
 	CurrentForwardValue = FMath::FInterpTo(CurrentForwardValue, ForwardInputValue, Controller->GetWorld()->GetDeltaSeconds(), InterpolationSpeed);
 	bWasMovingForward = false;
 
-	if (!Pawn) return;
 	if (CurrentForwardValue >= 0)
 	{
 		if (!bMovingForward)
@@ -90,6 +88,7 @@ void USkateMovementComponent::MoveForward(const FInputActionValue& Value)
 	}
 	Pawn->AddMovementInput(Pawn->GetActorForwardVector(), CurrentForwardValue);	
 }
+
 
 void USkateMovementComponent::StopMoveForward(const FInputActionValue& Value)
 {
@@ -111,6 +110,7 @@ void USkateMovementComponent::MoveRight(const FInputActionValue& Value)
 	GetOwner()->AddActorLocalRotation(FRotator(0, YawDeltaRotation, 0));
 }
 
+
 void USkateMovementComponent::Look(const FInputActionValue& Value)
 {
 	const FVector2D LookAxisVector = Value.Get<FVector2D>();
@@ -122,10 +122,11 @@ void USkateMovementComponent::Look(const FInputActionValue& Value)
 	}
 }
 
+
 void USkateMovementComponent::Jump()
 {
-	if (!bCanJump) return;
-	if (CharacterMovementComponent == nullptr) return;	
+	if (!bCanJump || CharacterMovementComponent == nullptr) return;
+
 	ACharacter* PlayerCharacter = Cast<ACharacter>(GetOwner());
 	if (PlayerCharacter == nullptr) return;
 	
@@ -139,6 +140,7 @@ void USkateMovementComponent::Jump()
 
 }
 
+
 void USkateMovementComponent::StopJumping()
 {
 	ACharacter* PlayerCharacter = Cast<ACharacter>(GetOwner());
@@ -147,11 +149,10 @@ void USkateMovementComponent::StopJumping()
 	PlayerCharacter->StopJumping();	
 }
 
+
 void USkateMovementComponent::SpeedUp(const FInputActionValue& Value)
 {
-	if (CharacterMovementComponent == nullptr) return;
-	if (CurrentForwardValue < 0) return;
-
+	if (CharacterMovementComponent == nullptr || CurrentForwardValue < 0) return;
 	bSpeedingUp = Value.Get<bool>();
 	CharacterMovementComponent->MaxWalkSpeed = bSpeedingUp ? SpeedUpSpeed : ForwardSpeed;
 }
@@ -167,11 +168,13 @@ void USkateMovementComponent::ManageDelayBetweenJump()
 	}	
 }
 
+
 void USkateMovementComponent::SetCanJump()
 {
 	bCanJump = true;	
 	GetOwner()->GetWorldTimerManager().ClearTimer(MemberTimerHandle);
 }
+
 
 void USkateMovementComponent::SlideAfterMovement()
 {
@@ -185,6 +188,7 @@ void USkateMovementComponent::SlideAfterMovement()
 		CurrentForwardValue = 0;
 	}
 }
+
 
 void USkateMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType,
                                             FActorComponentTickFunction* ThisTickFunction)
