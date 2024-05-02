@@ -1,6 +1,7 @@
 #include "ScoreComponent.h"
 
 #include "SkateMovementComponent.h"
+#include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Skateboarding/HUD/ScoreWidget.h"
@@ -26,6 +27,8 @@ void UScoreComponent::BeginPlay()
 	GetOwner()->FindComponentByClass<USkateMovementComponent>()->OnJumped.AddDynamic(this, &UScoreComponent::OnJumped);
 }
 
+
+
 void UScoreComponent::OnJumped()
 {
 	PrimaryComponentTick.bCanEverTick = true;
@@ -33,10 +36,26 @@ void UScoreComponent::OnJumped()
 	if (bOverObstacle) JumpCounter ++;
 }
 
+void UScoreComponent::TryToScore(const AActor* OtherActor)
+{
+	const float ColliderHeight = OtherActor->FindComponentByClass<UBoxComponent>()->GetComponentLocation().Z;
+	const float PlayerHeight = GetOwner()->GetActorLocation().Z;
+	if (bIsValidPoint && bJumped && JumpCounter == 0 && CharacterMovementComponent->IsFalling() && ColliderHeight >= PlayerHeight)
+	{
+		Score = Score + OtherActor->FindComponentByClass<UObstacleLogicComponent>()->GetScoreValue();
+		IScoreWidgetInterface::Execute_SetScore(ScoreWidget, FString::FromInt(Score));
+		JumpCounter = 0;		
+	}
+}
+
 void UScoreComponent::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (!OtherActor->FindComponentByClass<UObstacleLogicComponent>()) return;
+	if (Obstacle != nullptr)
+	{
+		TryToScore(Obstacle);
+	}
 	Obstacle = OtherActor;
 	bOverObstacle = true;
 	JumpCounter = 0;
@@ -46,20 +65,12 @@ void UScoreComponent::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedCompo
 void UScoreComponent::OnCapsuleEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	if (!OtherActor->FindComponentByClass<UObstacleLogicComponent>() || CharacterMovementComponent == nullptr) return;
+ 	if (!OtherActor->FindComponentByClass<UObstacleLogicComponent>() || CharacterMovementComponent == nullptr) return;
 	if (Obstacle == OtherActor)
 	{
-		bOverObstacle = false;		
-	}
-	else
-	{
-		if (!CharacterMovementComponent->IsFalling()) return;	 	
-	}
-	if (bIsValidPoint && bJumped && JumpCounter == 0 && CharacterMovementComponent->IsFalling())
-	{
-		Score = Score + OtherActor->FindComponentByClass<UObstacleLogicComponent>()->GetScoreValue();
-		JumpCounter = 0;
-		IScoreWidgetInterface::Execute_SetScore(ScoreWidget, FString::FromInt(Score));
+		TryToScore(OtherActor);
+		Obstacle = nullptr;
+		bOverObstacle = false;
 	}
 }
 

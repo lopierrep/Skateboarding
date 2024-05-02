@@ -19,21 +19,10 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+    void TryToScore(const AActor* OtherActor);
+	
 	UFUNCTION()
 	void OnJumped();
-
-	UPROPERTY(EditAnywhere, Category=WidgetClass)
-	TSubclassOf<UScoreWidget> ScoreWidgetClass;
-	
-	UPROPERTY() UCharacterMovementComponent* CharacterMovementComponent;
-	UPROPERTY() AActor* Obstacle;
-	UPROPERTY()	UUserWidget* ScoreWidget;
-
-	bool bJumped;
-	bool bIsValidPoint;
-	bool bOverObstacle;
-	int32 Score;
-	int32 JumpCounter;
 
 	UFUNCTION()
 	virtual void OnCapsuleBeginOverlap(
@@ -53,6 +42,19 @@ private:
 		UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex
 	);
+
+	UPROPERTY(EditAnywhere, Category=WidgetClass)
+	TSubclassOf<UScoreWidget> ScoreWidgetClass;
+	
+	UPROPERTY() UCharacterMovementComponent* CharacterMovementComponent;
+	UPROPERTY() AActor* Obstacle;
+	UPROPERTY()	UUserWidget* ScoreWidget;
+
+	bool bJumped;
+	bool bIsValidPoint;
+	bool bOverObstacle;
+	int32 Score;
+	int32 JumpCounter;
 	
 public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
