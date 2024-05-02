@@ -31,10 +31,7 @@ class ASkateCharacter : public ACharacter
 public:
 	ASkateCharacter();
 	
-
 protected:
-	void Move(const FInputActionValue& Value);
-	void Look(const FInputActionValue& Value);
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void BeginPlay() override;
 
