@@ -19,7 +19,7 @@ I made a base class in C++ with a mesh and a box component for the collision. Th
 ### Score Component and widget (3h)
 Binds to the Jump from the Skate Movement Component and every time the player jumps checks if the player jumps over an obstacle and is it was a valid point and update the score widget.
 
-### Map (5h)
+### Map (6h)
 I made the map by combining assets from two different packages. I tried to make it fun and challenging.
 
 ### Personal assessment
