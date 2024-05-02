@@ -5,12 +5,13 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Skateboarding/HUD/ScoreWidget.h"
+#include "Skateboarding/Obstacles/Obstacle.h"
 #include "Skateboarding/Obstacles/ObstacleLogicComponent.h"
 
 
 UScoreComponent::UScoreComponent()
 {
-	PrimaryComponentTick.bCanEverTick = false;
+	PrimaryComponentTick.bCanEverTick = true;
 }
 
 void UScoreComponent::BeginPlay()
@@ -25,14 +26,16 @@ void UScoreComponent::BeginPlay()
 	GetOwner()->FindComponentByClass<UCapsuleComponent>()->OnComponentBeginOverlap.AddDynamic(this, &UScoreComponent::OnCapsuleBeginOverlap);
 	GetOwner()->FindComponentByClass<UCapsuleComponent>()->OnComponentEndOverlap.AddDynamic(this, &UScoreComponent::OnCapsuleEndOverlap);
 	GetOwner()->FindComponentByClass<USkateMovementComponent>()->OnJumped.AddDynamic(this, &UScoreComponent::OnJumped);
+	
+	SetComponentTickEnabled(false);
 }
 
 
 
 void UScoreComponent::OnJumped()
-{
-	PrimaryComponentTick.bCanEverTick = true;
+{	
 	bJumped = true;
+	SetComponentTickEnabled(true);
 	if (bOverObstacle) JumpCounter ++;
 }
 
@@ -40,7 +43,7 @@ void UScoreComponent::TryToScore(const AActor* OtherActor)
 {
 	const float ColliderHeight = OtherActor->FindComponentByClass<UBoxComponent>()->GetComponentLocation().Z;
 	const float PlayerHeight = GetOwner()->GetActorLocation().Z;
-	if (bIsValidPoint && bJumped && JumpCounter == 0 && CharacterMovementComponent->IsFalling() && ColliderHeight >= PlayerHeight)
+ 	if (bIsValidPoint && bJumped && JumpCounter == 0 && CharacterMovementComponent->IsFalling() && ColliderHeight >= PlayerHeight)
 	{
 		Score = Score + OtherActor->FindComponentByClass<UObstacleLogicComponent>()->GetScoreValue();
 		IScoreWidgetInterface::Execute_SetScore(ScoreWidget, FString::FromInt(Score));
@@ -89,6 +92,6 @@ void UScoreComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	{
 		bJumped = false;
 		bIsValidPoint = false;
-		PrimaryComponentTick.bCanEverTick = false;
+		SetComponentTickEnabled(false);
 	}	
 }
