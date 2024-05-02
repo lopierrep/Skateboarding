@@ -137,7 +137,6 @@ void USkateMovementComponent::Jump()
 		OnJumped.Broadcast();
 		ISkateInterface::Execute_Jump(GetOwner()->FindComponentByClass<UChildActorComponent>()->GetChildActor());
 	}
-
 }
 
 

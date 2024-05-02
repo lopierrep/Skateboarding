@@ -15,14 +15,16 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnJumped);
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable)
 class SKATEBOARDING_API USkateMovementComponent : public UActorComponent, public ISkateboardingValuesInterface
 {
+
+	GENERATED_BODY()
+	
 public:
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
+						   FActorComponentTickFunction* ThisTickFunction) override;
+	
 	virtual void GetPlayerInputs_Implementation(float& MoveForward, float& MoveRight) override;
 	virtual bool GetSpeedUp_Implementation() override;
 
-private:
-	GENERATED_BODY()
-
-public:	
 	USkateMovementComponent();
 
 	void SetupInputs(class UInputComponent* PlayerInputComponent);
@@ -85,9 +87,5 @@ private:
 	void ManageDelayBetweenJump();
 	void SetCanJump();
 	void SlideAfterMovement();
-	
-public:	
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
-	                           FActorComponentTickFunction* ThisTickFunction) override;
 };
 
