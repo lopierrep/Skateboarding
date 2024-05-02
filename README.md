@@ -13,7 +13,7 @@ For lateral movement I modify the player's rotation based on his speed. For the 
 ### Player Animation Blueprint and animations (5h)
 I retargeted the animations from mixamo to the UE5 skeleton with an IK Rig that I have from another project. I used the animation blueprint to combine the animations and make the movement as fluid as possible
 
-### Obstacles (2h)
+### Obstacles (1h)
 I made a base class in C++ with a mesh and a box component for the collision. Then I made the ObstacleLogicComponent to easily identify an actor as an obstacle by having this component and also to add any possible logic for the obstacle in the future, but for now it is empty.
 
 ### Score Component and widget (3h)
